@@ -26,8 +26,14 @@ public class CustomerServiceImpl implements CustomerService {
     private ModelMapper modelMapper;
     @Override
     public List<CustomerDTO> findAll() {
-        return customerRepository.findAll().stream().map(customer -> modelMapper.map(customer, CustomerDTO.class))
-                .collect(Collectors.toList());
+        Optional<List<Customer>> result = Optional.of(customerRepository.findAll());
+        if(result.isPresent()){
+            return result.get().stream().map(customer -> modelMapper.map(customer, CustomerDTO.class))
+                    .collect(Collectors.toList());
+        }
+        else {
+            throw new CustomerNotFoundException("No customer available");
+        }
     }
 
     @Override
@@ -46,8 +52,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO save(CustomerDTO theCustomerDTO) {
         Customer customer = modelMapper.map(theCustomerDTO, Customer.class);
-        customerRepository.save(customer);
-        return modelMapper.map(customer, CustomerDTO.class);
+        Optional<Customer> result = Optional.of(customerRepository.save(customer));
+
+        if(result.isPresent()){
+            return modelMapper.map(result.get(), CustomerDTO.class);
+        }
+        else{
+            throw new RuntimeException("Customer Not Saved");
+        }
     }
 
     @Override

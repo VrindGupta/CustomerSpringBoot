@@ -12,5 +12,7 @@ public interface CustomerService {
 
     CustomerDTO save(CustomerDTO customerDTO);
 
+    CustomerDTO update(CustomerDTO customerDTO);
+
     void deleteById(int theId);
 }

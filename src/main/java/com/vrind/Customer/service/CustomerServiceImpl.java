@@ -51,6 +51,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public CustomerDTO update(CustomerDTO theCustomerDTO) {
+        Customer customer = modelMapper.map(theCustomerDTO, Customer.class);
+        customerRepository.save(customer);
+        return modelMapper.map(customer, CustomerDTO.class);
+    }
+
+    @Override
     public void deleteById(int id) {
         customerRepository.deleteById(id);
     }

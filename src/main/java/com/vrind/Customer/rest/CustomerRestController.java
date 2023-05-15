@@ -36,11 +36,11 @@ public class CustomerRestController {
     @PutMapping("/{customerId}")
     public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody CustomerDTO customerDTO) {
 
-        return ResponseEntity.ok().body(customerService.save(customerDTO));
+        return ResponseEntity.ok().body(customerService.update(customerDTO));
     }
-    @DeleteMapping("/customers/{customerId}")
+    @DeleteMapping("/{customerId}")
     public ResponseEntity deleteCustomer(@PathVariable int customerId) {
-
+        customerService.deleteById(customerId);
         return ResponseEntity.ok().body(null);
     }
 }

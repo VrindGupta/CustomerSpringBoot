@@ -1,16 +1,16 @@
 package com.vrind.Customer.service;
 
-import com.vrind.Customer.entity.Customer;
+import com.vrind.Customer.dto.CustomerDTO;
 
 import java.util.List;
 
 public interface CustomerService {
 
-    List<Customer> findAll();
+    List<CustomerDTO> findAll();
 
-    Customer findById(int theId);
+    CustomerDTO findById(int theId);
 
-    Customer save(Customer customer);
+    CustomerDTO save(CustomerDTO customerDTO);
 
     void deleteById(int theId);
 }

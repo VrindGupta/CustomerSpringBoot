@@ -1,69 +1,46 @@
 package com.vrind.Customer.rest;
 
-import com.vrind.Customer.entity.Customer;
+import com.vrind.Customer.dto.CustomerDTO;
 import com.vrind.Customer.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/customers")
 public class CustomerRestController {
     @Autowired
     private CustomerService customerService;
 
     @Autowired
     public CustomerRestController(CustomerService customerService){this.customerService = customerService;}
-    @GetMapping("/customers")
-    public List<Customer> getStudents() {
+    @GetMapping("/")
+    public List<CustomerDTO> getAllCustomers() {
+
         return customerService.findAll();
     }
 
-    @GetMapping("/customers/{customerId}")
-    public Customer getCustomer(@PathVariable int customerId) {
+    @GetMapping("/{customerId}")
+    public ResponseEntity<CustomerDTO> getCustomer(@PathVariable int customerId) {
 
-        Customer theCustomer = customerService.findById(customerId);
-
-        if (theCustomer == null) {
-            throw new RuntimeException("Customer id not found - " + customerId);
-        }
-
-        return theCustomer;
+        return ResponseEntity.ok().body(customerService.findById(customerId));
     }
-    @PostMapping("/customers")
-    public Customer addCustomer(@RequestBody Customer customer) {
+    @PostMapping("/")
+    public ResponseEntity<CustomerDTO> addCustomer(@RequestBody CustomerDTO customerDTO) {
 
-        // also just in case they pass an id in JSON ... set id to 0
-        // this is to force a save of new item ... instead of update
-
-        customer.setId(0);
-
-        Customer dbCustomer = customerService.save(customer);
-
-        return dbCustomer;
+        customerDTO.setId(0);
+        return ResponseEntity.ok().body(customerService.save(customerDTO));
     }
-    @PutMapping("/customers")
-    public Customer updateCustomer(@RequestBody Customer customer) {
+    @PutMapping("/{customerId}")
+    public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody CustomerDTO customerDTO) {
 
-        Customer dbCustomer = customerService.save(customer);
-
-        return dbCustomer;
+        return ResponseEntity.ok().body(customerService.save(customerDTO));
     }
     @DeleteMapping("/customers/{customerId}")
-    public String deleteCustomer(@PathVariable int customerId) {
+    public ResponseEntity deleteCustomer(@PathVariable int customerId) {
 
-        Customer tempCustomer = customerService.findById(customerId);
-
-        // throw exception if null
-
-        if (tempCustomer == null) {
-            throw new RuntimeException("Customer id not found - " + customerId);
-        }
-
-        customerService.deleteById(customerId);
-
-        return "Deleted customer id - " + customerId;
+        return ResponseEntity.ok().body(null);
     }
 }
